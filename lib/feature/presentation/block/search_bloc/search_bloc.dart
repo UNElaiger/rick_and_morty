@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/feature/domain/usecases/serch_person.dart';
 import 'package:rick_and_morty/feature/presentation/block/search_bloc/search_event.dart';
@@ -31,30 +33,25 @@ import '../../../../core/error/failure.dart';
 const SERVER_FAILURE_MESSAGE = 'Server Failure';
 const CACHED_FAILURE_MESSAGE = 'Cache Failure';
 
+// BLoC 8.0.0
 class PersonSearchBloc extends Bloc<PersonSearchEvent, PersonSearchState> {
-  final SearchPersons searchPerson;
+  final SearchPersons searchPersons;
 
-  PersonSearchBloc({required this.searchPerson}) : super(PersonSearchEmpty());
-
-  @override
-  Stream<PersonSearchState> mapEventToState(PersonSearchEvent event) async* {
-    if (event is SearchPersons) {
-      yield* _mapFetchPersonsToState(event.personQuery);
-    }
+  PersonSearchBloc({required this.searchPersons}) : super(PersonSearchEmpty()) {
+    on<SearchPersons>(_onEvent);
   }
 
-  Stream<PersonSearchState> _mapFetchPersonsToState(String personQuery) async* {
-    yield PersonSearchLoading();
-
+  FutureOr<void> _onEvent(
+      SearchPersons event, Emitter<PersonSearchState> emit) async {
+    emit(PersonSearchLoading());
     final failureOrPerson =
-        await searchPerson(SearchPesonParams(query: personQuery));
-
-    yield failureOrPerson.fold(
+        await searchPersons(SearchPesonParams(query: event.personQuery));
+    emit(failureOrPerson.fold(
         (failure) => PersonSearchError(message: _mapFailureToMessage(failure)),
-        (person) => PersonSearchLoaded(persons: person));
+        (person) => PersonSearchLoaded(persons: person)));
   }
 
-  String _mapFailureToMessage(Failure failure) {
+    String _mapFailureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       case ServerFailure:
         return SERVER_FAILURE_MESSAGE;
