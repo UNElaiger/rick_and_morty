@@ -5,21 +5,23 @@ import 'package:rick_and_morty/feature/domain/repositories/person_repository.dar
 import '../../../core/error/failure.dart';
 import '../entities/person_entity.dart';
 
-class SearchPeson extends UseCase<List<PersonEntity>,SearchPesonParams>{
+class SearchPerson extends UseCase<List<PersonEntity>, SearchPersonParams> {
   final PersonRepository personRepository;
 
-  SearchPeson(this.personRepository);
+  SearchPerson(this.personRepository);
 
-  Future<Either<Failure,List<PersonEntity>>> call(SearchPesonParams params) async {
+  @override
+  Future<Either<Failure, List<PersonEntity>>> call(
+      SearchPersonParams params) async {
     return await personRepository.searchPerson(params.query);
   }
 }
 
-class SearchPesonParams extends Equatable{
+class SearchPersonParams extends Equatable {
   final String query;
 
-  SearchPesonParams({required this.query});
+  const SearchPersonParams({required this.query});
 
   @override
-  List<Object?> get props => [query];
+  List<Object> get props => [query];
 }

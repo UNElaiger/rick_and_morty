@@ -5,8 +5,8 @@ class LocationModel extends LocationEntity {
 
   factory LocationModel.fromJson(Map<String,dynamic> json){
     return LocationModel(
-      name: json['name'],
-      url: json['url'],
+      name: json['name'] as String,
+      url: json['url'] as String,
     );
   }
 

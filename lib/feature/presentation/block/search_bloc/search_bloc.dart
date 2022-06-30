@@ -35,9 +35,9 @@ const CACHED_FAILURE_MESSAGE = 'Cache Failure';
 
 // BLoC 8.0.0
 class PersonSearchBloc extends Bloc<PersonSearchEvent, PersonSearchState> {
-  final SearchPersons searchPersons;
+  final SearchPerson searchPerson;
 
-  PersonSearchBloc({required this.searchPersons}) : super(PersonSearchEmpty()) {
+  PersonSearchBloc({required this.searchPerson}) : super(PersonSearchEmpty()) {
     on<SearchPersons>(_onEvent);
   }
 
@@ -45,7 +45,7 @@ class PersonSearchBloc extends Bloc<PersonSearchEvent, PersonSearchState> {
       SearchPersons event, Emitter<PersonSearchState> emit) async {
     emit(PersonSearchLoading());
     final failureOrPerson =
-        await searchPersons(SearchPesonParams(query: event.personQuery));
+        await searchPerson(SearchPersonParams(query: event.personQuery));
     emit(failureOrPerson.fold(
         (failure) => PersonSearchError(message: _mapFailureToMessage(failure)),
         (person) => PersonSearchLoaded(persons: person)));

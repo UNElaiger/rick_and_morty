@@ -5,12 +5,14 @@ import 'package:rick_and_morty/feature/domain/repositories/person_repository.dar
 import '../../../core/error/failure.dart';
 import '../entities/person_entity.dart';
 
-class GetAllPersons extends UseCase<List<PersonEntity>, PagePersonParams>{
+class GetAllPersons extends UseCase<List<PersonEntity>, PagePersonParams> {
   final PersonRepository personRepository;
 
   GetAllPersons(this.personRepository);
 
-  Future<Either<Failure,List<PersonEntity>>> call(PagePersonParams params) async {
+  @override
+  Future<Either<Failure, List<PersonEntity>>> call(
+      PagePersonParams params) async {
     return await personRepository.getAllPersons(params.page);
   }
 }
@@ -19,9 +21,8 @@ class GetAllPersons extends UseCase<List<PersonEntity>, PagePersonParams>{
 class PagePersonParams extends Equatable {
   final int page;
 
-  PagePersonParams({required this.page});
+  const PagePersonParams({required this.page});
 
   @override
-  List<Object?> get props => [page];
-  
+  List<Object> get props => [page];
 }

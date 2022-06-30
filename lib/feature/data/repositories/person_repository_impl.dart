@@ -8,26 +8,30 @@ import 'package:rick_and_morty/feature/data/models/person_model.dart';
 import 'package:rick_and_morty/feature/domain/entities/person_entity.dart';
 import '../../domain/repositories/person_repository.dart';
 
-
 class PersonRepositoryImpl implements PersonRepository {
   final PersonRemoteDataSource remoteDataSource;
   final PersonLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
-  PersonRepositoryImpl({required this.remoteDataSource, required this.localDataSource, required this.networkInfo});
+  PersonRepositoryImpl({
+    required this.remoteDataSource,
+    required this.localDataSource,
+    required this.networkInfo,
+  });
+
   @override
-  Future<Either<Failure, List<PersonEntity>>> getAllPersons(int page) async{
-    return await _getPersons((){
+  Future<Either<Failure, List<PersonEntity>>> getAllPersons(int page) async {
+    return await _getPersons(() {
       return remoteDataSource.getAllPersons(page);
     });
   }
 
   @override
-  Future<Either<Failure, List<PersonEntity>>> searchPerson(String query) async{
+  Future<Either<Failure, List<PersonEntity>>> searchPerson(String query) async {
     return await _getPersons(() {
       return remoteDataSource.searchPerson(query);
     });
-}
+  }
 
   Future<Either<Failure, List<PersonModel>>> _getPersons(
       Future<List<PersonModel>> Function() getPersons) async {
